@@ -1,0 +1,110 @@
+{
+  "policy": {
+    "volumes": {
+      "red": {
+        "epoch": 1,
+        "min_sites": 2
+      }
+    },
+    "capacity": {
+      "n": 54,
+      "s": 54
+    },
+    "hard_at": 60
+  },
+  "objects": {
+    "body.bin": {
+      "bytes": 5,
+      "sha256": "92b63e37fc1a1f340d5939f9fe6f8f45ca787705443e4f5e9a2033cba55df4bb"
+    },
+    "old.bin": {
+      "bytes": 6,
+      "sha256": "8b2592cb3b7e22f11d1f2a01e8ebaebf03a08e0342fa64d105ee96308355e983"
+    },
+    "new.bin": {
+      "bytes": 6,
+      "sha256": "9fd94beb6d8e96840004f6caa15f1982aa4e8337ca262ae68de859fedd0e67d1"
+    }
+  },
+  "events": [
+    {
+      "at": 0,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/1",
+      "epoch": 1,
+      "site": "n",
+      "state": "verified",
+      "file": "old.bin"
+    },
+    {
+      "at": 1,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/1",
+      "epoch": 1,
+      "site": "s",
+      "state": "verified",
+      "file": "old.bin"
+    },
+    {
+      "at": 2,
+      "action": "open_read",
+      "volume": "red",
+      "version": "id/1",
+      "token": "r7",
+      "until": 39
+    },
+    {
+      "at": 3,
+      "action": "rotate",
+      "volume": "red",
+      "epoch": 2
+    },
+    {
+      "at": 6,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/1",
+      "epoch": 2,
+      "site": "n",
+      "state": "verified",
+      "file": "new.bin"
+    },
+    {
+      "at": 7,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/1",
+      "epoch": 2,
+      "site": "s",
+      "state": "verified",
+      "file": "new.bin"
+    },
+    {
+      "at": 8,
+      "action": "try_retire",
+      "volume": "red",
+      "epoch": 1
+    },
+    {
+      "at": 10,
+      "action": "read",
+      "token": "r7"
+    }
+  ],
+  "packets": [
+    {
+      "method": "POST",
+      "path": "/kms/red/2/open",
+      "status": 200,
+      "reply": {
+        "state": "valid",
+        "file": "body.bin"
+      },
+      "body": "new.bin",
+      "drop": false,
+      "lag_ms": 0
+    }
+  ]
+}

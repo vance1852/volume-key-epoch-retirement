@@ -1,0 +1,211 @@
+{
+  "policy": {
+    "volumes": {
+      "red": {
+        "epoch": 1,
+        "min_sites": 2
+      },
+      "blue": {
+        "epoch": 4,
+        "min_sites": 1
+      }
+    },
+    "capacity": {
+      "ridge": 64,
+      "valley": 45
+    },
+    "hard_at": 25
+  },
+  "objects": {
+    "body.bin": {
+      "bytes": 8,
+      "sha256": "b2ac5c589ec1f2ec7e23ab210e785bafdef91976e547c8a72a188a36b98ea65f"
+    },
+    "pending.bin": {
+      "bytes": 8,
+      "sha256": "4fea05cad3114bb54c1ff3bc2a15ec83aacb049c18edcad6d64c3ca120d24841"
+    },
+    "old.bin": {
+      "bytes": 10,
+      "sha256": "5b7d0829cce0b07f26fa2a0c62d1bf2106a5bb0c96d2911b820a1567c22d508c"
+    },
+    "new.bin": {
+      "bytes": 10,
+      "sha256": "4220d2445c40bc539b88d0caea642804e4de6c28e7903b486fce233b7e7d06c5"
+    },
+    "foreign.bin": {
+      "bytes": 10,
+      "sha256": "b70ed89337a7a72b54fc763ec2fc1f71d4f366e22ea89321011f0606d846b0a0"
+    },
+    "pending-old.bin": {
+      "bytes": 10,
+      "sha256": "ac046762d01b3d1edd70543016b5c5771aa5feeaa0dc093e3c70b8cb3dc121d4"
+    }
+  },
+  "events": [
+    {
+      "at": 0,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/4",
+      "site": "ridge",
+      "epoch": 1,
+      "state": "verified",
+      "file": "old.bin"
+    },
+    {
+      "at": 1,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/4",
+      "site": "valley",
+      "epoch": 1,
+      "state": "verified",
+      "file": "old.bin"
+    },
+    {
+      "at": 2,
+      "action": "replica",
+      "volume": "blue",
+      "version": "id/9",
+      "site": "ridge",
+      "epoch": 4,
+      "state": "verified",
+      "file": "foreign.bin"
+    },
+    {
+      "at": 3,
+      "action": "open_read",
+      "volume": "red",
+      "version": "id/4",
+      "token": "follow",
+      "until": 32
+    },
+    {
+      "at": 4,
+      "action": "prepare_upload",
+      "volume": "red",
+      "request": "u13",
+      "version": "id/5",
+      "epoch": 1
+    },
+    {
+      "at": 7,
+      "action": "rotate",
+      "volume": "red",
+      "epoch": 2
+    },
+    {
+      "at": 8,
+      "action": "offline",
+      "site": "valley"
+    },
+    {
+      "at": 9,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/4",
+      "site": "ridge",
+      "epoch": 2,
+      "state": "durable",
+      "file": "new.bin"
+    },
+    {
+      "at": 12,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/4",
+      "site": "ridge",
+      "epoch": 2,
+      "state": "verified",
+      "file": "new.bin"
+    },
+    {
+      "at": 17,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/5",
+      "site": "valley",
+      "epoch": 1,
+      "state": "durable",
+      "file": "pending-old.bin",
+      "request": "u13"
+    },
+    {
+      "at": 23,
+      "action": "try_retire",
+      "volume": "red",
+      "epoch": 1
+    },
+    {
+      "at": 25,
+      "action": "force_revoke",
+      "volume": "red",
+      "epoch": 1
+    },
+    {
+      "at": 26,
+      "action": "read",
+      "token": "follow"
+    },
+    {
+      "at": 27,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/5",
+      "site": "valley",
+      "epoch": 1,
+      "state": "verified",
+      "file": "pending-old.bin"
+    }
+  ],
+  "packets": [
+    {
+      "method": "POST",
+      "path": "/kms/red/1/open",
+      "status": 200,
+      "reply": {
+        "state": "valid",
+        "file": "body.bin"
+      },
+      "body": "old.bin",
+      "drop": false,
+      "lag_ms": 0
+    },
+    {
+      "method": "POST",
+      "path": "/kms/red/2/seal",
+      "status": 200,
+      "reply": {
+        "state": "valid",
+        "file": "new.bin"
+      },
+      "body": "body.bin",
+      "drop": false,
+      "lag_ms": 0
+    },
+    {
+      "method": "POST",
+      "path": "/kms/red/2/open",
+      "status": 200,
+      "reply": {
+        "state": "valid",
+        "file": "body.bin"
+      },
+      "body": "new.bin",
+      "drop": false,
+      "lag_ms": 0
+    },
+    {
+      "method": "POST",
+      "path": "/kms/red/1/open",
+      "status": 410,
+      "reply": {
+        "state": "revoked"
+      },
+      "body": "pending-old.bin",
+      "drop": false,
+      "lag_ms": 0
+    }
+  ]
+}
