@@ -40,6 +40,14 @@
     "pending-old.bin": {
       "bytes": 10,
       "sha256": "ac046762d01b3d1edd70543016b5c5771aa5feeaa0dc093e3c70b8cb3dc121d4"
+    },
+    "historic.bin": {
+      "bytes": 8,
+      "sha256": "888b8838d94c6a8aff52cafd2cd45524f4459d2a29ce05f808b68c79a194e189"
+    },
+    "historic-old.bin": {
+      "bytes": 10,
+      "sha256": "55c39f68fe9e586c464a4ca3189fc30afa9815cd037c75e825899c7ee90bab92"
     }
   },
   "events": [
@@ -64,6 +72,26 @@
       "file": "old.bin"
     },
     {
+      "at": 1,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/3",
+      "site": "ridge",
+      "epoch": 1,
+      "state": "verified",
+      "file": "historic-old.bin"
+    },
+    {
+      "at": 1,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/3",
+      "site": "valley",
+      "epoch": 1,
+      "state": "verified",
+      "file": "historic-old.bin"
+    },
+    {
       "at": 2,
       "action": "replica",
       "volume": "blue",
@@ -80,6 +108,14 @@
       "version": "id/4",
       "token": "follow",
       "until": 32
+    },
+    {
+      "at": 3,
+      "action": "open_read",
+      "volume": "red",
+      "version": "id/3",
+      "token": "historical",
+      "until": 35
     },
     {
       "at": 4,
@@ -149,6 +185,11 @@
       "token": "follow"
     },
     {
+      "at": 26,
+      "action": "read",
+      "token": "historical"
+    },
+    {
       "at": 27,
       "action": "replica",
       "volume": "red",
@@ -157,6 +198,16 @@
       "epoch": 1,
       "state": "verified",
       "file": "pending-old.bin"
+    },
+    {
+      "at": 28,
+      "action": "replica",
+      "volume": "red",
+      "version": "id/3",
+      "site": "valley",
+      "epoch": 1,
+      "state": "verified",
+      "file": "historic-old.bin"
     }
   ],
   "packets": [
@@ -193,6 +244,29 @@
         "file": "body.bin"
       },
       "body": "new.bin",
+      "drop": false,
+      "lag_ms": 0
+    },
+    {
+      "method": "POST",
+      "path": "/kms/red/1/open",
+      "status": 200,
+      "reply": {
+        "state": "valid",
+        "file": "historic.bin"
+      },
+      "body": "historic-old.bin",
+      "drop": false,
+      "lag_ms": 0
+    },
+    {
+      "method": "POST",
+      "path": "/kms/red/1/open",
+      "status": 410,
+      "reply": {
+        "state": "revoked"
+      },
+      "body": "historic-old.bin",
       "drop": false,
       "lag_ms": 0
     },
